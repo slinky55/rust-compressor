@@ -8,12 +8,19 @@ fn main() {
     match args.len() {
         3 => compress(&args[1], &args[2]),
         4 => {
-            let options = &args[3..];
+            let mut options = Vec::from(&args[3..]);
 
-            for option in options {
+            while options.len() > 0 {
+                let option = options.pop().unwrap();
                 match option.as_str() {
                     "-c" => compress(&args[1], &args[2]),
                     "-d" => decompress(&args[1], &args[2]),
+                    "-m" => {
+                        let method = options.pop().unwrap_or_else(|| {
+                            eprintln!("Expected method type after -m");
+                            std::process::exit(1);
+                        });
+                    }
                     _ => {
                         eprintln!("Unknown option: {}", option);
                         std::process::exit(1);
