@@ -6,8 +6,12 @@ fn main() {
     let args: Vec<String> = env::args().collect();
 
     match args.len() {
+        1 | 2 => {
+            eprintln!("Usage: rust-compressor <src> <dst> [-c|-d|-m <method>]");
+            std::process::exit(1);
+        }
         3 => compress(&args[1], &args[2]),
-        4 => {
+        _ => {
             let mut options = Vec::from(&args[3..]);
 
             while options.len() > 0 {
@@ -27,10 +31,6 @@ fn main() {
                     }
                 }
             }
-        }
-        _ => {
-            eprintln!("Usage: {} <src> <dst> [options...]", args[0]);
-            std::process::exit(1);
         }
     }
 }
